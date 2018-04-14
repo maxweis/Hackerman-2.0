@@ -7,7 +7,7 @@ void Hackerman::setup(){
   screen_width = 1920;
   screen_height = 1080;
 
-  font_inconsolata14.load("/home/max/git/final-project-maxweis/assets/font/inconsolata.ttf", 14);
+  font_inconsolata14.load("font/inconsolata.ttf", 14);
 
   InitPanels();
 }
