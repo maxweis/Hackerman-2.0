@@ -1,6 +1,6 @@
 # Development progress
 
-##* To do
+## To do
 * Finish gameplay mechanics plans
 * Design utility interactions on main screen
 * Create Player class with Bitcoin wallet, upgrade status, etc.
