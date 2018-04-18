@@ -62,5 +62,5 @@ int const kUtilButtonRows = 4;
 int const kUtilButtonColumns = 2;
 int const kUtilButtonAmount = kUtilButtonRows * kUtilButtonRows;
 float const kUtilButtonWidthRatio = 1.0 / 5.0;
-const std::vector<std::string> kUtilButtonIconPaths = {"icons/shield.png", "icons/attack_shield.png", "", "",
-"", "", "", ""};
+const std::vector<std::string> kUtilButtonIconPaths = {"icons/connect.png", "icons/disconnect.png", "icons/firewall_up.png", "icons/encrypt.png",
+"icons/files.png", "icons/bitcoin.png", "icons/firewall_attack.png", "icons/decrypt.png"};
