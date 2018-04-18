@@ -23,8 +23,7 @@ class Hackerman : public ofBaseApp {
 	public:
     Font font_inconsolata14;
 
-    int screen_width;
-    int screen_height;
+    ofRectangle screen;
 
     Panel main_panel;
     ConsolePanel console_panel;

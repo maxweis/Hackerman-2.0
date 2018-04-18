@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "enemy.h"
+#include <vector>
 
 class Panel : public ofRectangle {
   public:
@@ -23,18 +24,21 @@ class EnemyPanel : public Panel {
     std::string name;
     int enemy_number;
     std::string ip;
-
 };
 
 class UtilButton : public Panel {
   public:
     UtilButton() {}
-    UtilButton(ofRectangle bound) : Panel(bound) {}
-    UtilButton(float x, float y, float width, float height, std::string title) 
-      : Panel(x, y, width, height), title(title) {}
+    UtilButton(ofRectangle bound, int row, int column, ofImage *icon) 
+      : Panel(bound), row(row), column(column), icon(icon) {}
+    UtilButton(float x, float y, float width, float height, int row, int column) 
+      : Panel(x, y, width, height), row(row), column() {}
+    // ~UtilButton();
 
     std::string title;
-    ofImage icon;
+    ofImage *icon;
+
+    int row, column;
 };
 
 class ConsolePanel : public Panel {
@@ -58,3 +62,5 @@ int const kUtilButtonRows = 4;
 int const kUtilButtonColumns = 2;
 int const kUtilButtonAmount = kUtilButtonRows * kUtilButtonRows;
 float const kUtilButtonWidthRatio = 1.0 / 5.0;
+const std::vector<std::string> kUtilButtonIconPaths = {"icons/shield.png", "icons/attack_shield.png", "", "",
+"", "", "", ""};

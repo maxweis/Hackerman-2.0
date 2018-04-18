@@ -2,10 +2,9 @@
 
 //--------------------------------------------------------------
 void Hackerman::setup(){
-  ofSetWindowTitle("Hackerman");
+  screen = ofRectangle(0, 0, 1920, 1080); 
 
-  screen_width = 1920;
-  screen_height = 1080;
+  ofSetWindowTitle("Hackerman");
 
   font_inconsolata14.load("font/inconsolata.ttf", 14);
 
@@ -64,7 +63,6 @@ void Hackerman::mouseExited(int x, int y){
 
 //--------------------------------------------------------------
 void Hackerman::windowResized(int w, int h){
-
 }
 
 //--------------------------------------------------------------

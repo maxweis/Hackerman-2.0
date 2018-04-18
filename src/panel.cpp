@@ -3,8 +3,9 @@
 #include "enemy.h"
 
 void Hackerman::InitEnemyPanel() {
-  float enemy_panel_width = screen_width * kEnemyPanelWidthRatio;
-  float enemy_panel_height = screen_height / kEnemyAmount;
+  //enemy panel dimensions
+  float enemy_panel_width = screen.width * kEnemyPanelWidthRatio;
+  float enemy_panel_height = screen.height / kEnemyAmount;
 
   //create kEnemyAmount panels of same height and width
   for (int i = 0; i < kEnemyAmount; i++) {
@@ -15,30 +16,40 @@ void Hackerman::InitEnemyPanel() {
 
 void Hackerman::InitConsolePanel() {
   //create rectangle for console panel
-  float console_panel_width = screen_width - enemy_panels[0].width;
-  float console_panel_height = screen_height * kConsolePanelHeightRatio;
-  ofRectangle console_panel_rect = ofRectangle(enemy_panels[0].width, (1 - kConsolePanelHeightRatio) * screen_height, console_panel_width, console_panel_height);
+  float console_panel_width = screen.width - enemy_panels[0].width;
+  float console_panel_height = screen.height * kConsolePanelHeightRatio;
+  ofRectangle console_panel_rect = ofRectangle(enemy_panels[0].width, (1 - kConsolePanelHeightRatio) * screen.height, console_panel_width, console_panel_height);
   console_panel = ConsolePanel(console_panel_rect);
 }
 
 void Hackerman::InitUtilPanel() {
-  float util_button_width = (screen_width * kUtilButtonWidthRatio) / kUtilButtonColumns;
-  float util_button_height = (screen_height - console_panel.height) / kUtilButtonRows;
+  //individual button dimensions
+  float util_button_width = (screen.width * kUtilButtonWidthRatio) / kUtilButtonColumns;
+  float util_button_height = (screen.height - console_panel.height) / kUtilButtonRows;
 
-  for (int column = 0; column < kUtilButtonColumns; column++) {
-    for (int row = 0; row < kUtilButtonRows; row++) {
-      float util_button_x = screen_width - (screen_width * kUtilButtonWidthRatio) + util_button_width * column;
+  for (int row = 0; row < kUtilButtonRows; row++) {
+    for (int column = 0; column < kUtilButtonColumns; column++) {
+      //specific button coordinates
+      float util_button_x = screen.width - (screen.width * kUtilButtonWidthRatio) + util_button_width * column;
       float util_button_y = row * util_button_height;
       ofRectangle util_button_rect = ofRectangle(util_button_x, util_button_y, util_button_width, util_button_height);
+      std::string button_icon_path = kUtilButtonIconPaths[row * kUtilButtonColumns + column];
 
-      util_buttons.push_back(UtilButton(util_button_rect));
+      //add image if present
+      ofImage *image = nullptr;
+      if (!button_icon_path.empty()) {
+        image = new ofImage(button_icon_path);
+      }
+
+      util_buttons.push_back(UtilButton(util_button_rect, row, column, image));
     }
   }
 }
 
 void Hackerman::InitMainPanel() {
-  float main_panel_width = screen_width - enemy_panels[0].width - (util_buttons[0].width * kUtilButtonColumns);
-  float main_panel_height = screen_height - console_panel.height;
+  //main panel dimensions
+  float main_panel_width = screen.width - enemy_panels[0].width - (util_buttons[0].width * kUtilButtonColumns);
+  float main_panel_height = screen.height - console_panel.height;
 
   ofRectangle main_panel_rect = ofRectangle(enemy_panels[0].width, 0, main_panel_width, main_panel_height);
 
@@ -62,8 +73,11 @@ void Hackerman::DrawEnemyPanel() {
   float ip_align_ratio = 1.0 / 3.0;
   for (EnemyPanel enemy_panel : enemy_panels) {
     ofDrawRectangle((ofRectangle) enemy_panel);
+    //draw panel number
     font_inconsolata14.DrawTopLeftAlign(std::to_string(enemy_panel.enemy_number), (ofRectangle) enemy_panel, kMainColor, kBorderWidth);
+    //draw enemy name
     font_inconsolata14.DrawCenterAlignX(enemy_panel.name, (ofRectangle) enemy_panel, name_align_ratio, kMainColor);
+    //draw enemy ip
     font_inconsolata14.DrawCenterAlignX(enemy_panel.ip, (ofRectangle) enemy_panel, ip_align_ratio, kMainColor);
   }
 }
@@ -73,17 +87,24 @@ void Hackerman::DrawConsolePanel() {
   ofSetColor(kMainColor);
   ofSetLineWidth(kLineWidth);
 
+  //draw frame
   ofDrawRectangle((ofRectangle) console_panel);
+  //draw prompt
   font_inconsolata14.DrawBottomLeftAlign(">>", console_panel.x + kBorderWidth, console_panel.y + console_panel.height - kBorderWidth, kMainColor);
 }
 
 void Hackerman::DrawUtilPanel() {
   ofNoFill();
-  ofSetColor(kMainColor);
+  ofSetColor(kWhite);
   ofSetLineWidth(kLineWidth);
 
   for (UtilButton util_button : util_buttons) {
+    //draw borders
       ofDrawRectangle((ofRectangle) util_button);
+      if (util_button.icon) {
+        //draw icon
+        util_button.icon->draw((ofRectangle) util_button);
+      }
   }
 }
 
@@ -92,15 +113,15 @@ void Hackerman::DrawMainPanel() {
   ofSetColor(kWhite);
   ofSetLineWidth(kLineWidth);
 
+  //draw border
   ofDrawRectangle((ofRectangle) main_panel);
 
+  //draw centered example text
   font_inconsolata14.DrawCenterAlign("Main area", (ofRectangle) main_panel, kMainColor);
 }
 
 void Hackerman::DrawPanels() {
-  ofSetColor(kBlack);
-  ofFill();
-  ofDrawRectangle(0, 0, screen_width, screen_height);
+  ClearScreen();
   DrawEnemyPanel();
   DrawConsolePanel();
   DrawUtilPanel();
