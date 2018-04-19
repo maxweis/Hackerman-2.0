@@ -95,8 +95,8 @@ void Hackerman::DrawConsolePanel() {
 
 void Hackerman::DrawUtilPanel() {
   ofNoFill();
-  ofSetColor(kWhite);
   ofSetLineWidth(kLineWidth);
+  ofSetColor(kWhite);
 
   for (UtilButton util_button : util_buttons) {
     //draw borders
@@ -117,7 +117,7 @@ void Hackerman::DrawMainPanel() {
   ofDrawRectangle((ofRectangle) main_panel);
 
   //draw centered example text
-  font_inconsolata14.DrawCenterAlign("Main area", (ofRectangle) main_panel, kMainColor);
+  // font_inconsolata14.DrawCenterAlign("Main area", (ofRectangle) main_panel, kMainColor);
 }
 
 void Hackerman::DrawPanels() {
