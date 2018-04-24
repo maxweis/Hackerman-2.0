@@ -3,6 +3,11 @@
 #include <vector>
 #include <iostream>
 
+class Enemy {
+  bool firewall_up;
+
+};
+
 const int kEnemyAmount = 5;
 
 const int kEnemyNamesAmount = 18;
