@@ -1,9 +1,20 @@
 #include "ofMain.h"
 #include "ofApp.h"
 
-int main( ){
-  //setup OpenGL context
-	ofSetupOpenGL(1920, 1080, OF_WINDOW);
+int main(int argc, char *argv[]){
+  int screen_width = 1366;
+  int screen_height = 768;
 
-	ofRunApp(new Hackerman());
+  if (argc >= 3) {
+    screen_width = std::stoi(argv[1]);
+    screen_height = std::stoi(argv[2]);
+  }
+
+  ofSetupOpenGL(screen_width, screen_height, OF_WINDOW);
+
+  auto game = new Hackerman();
+
+  game->SetResolution(screen_width, screen_height);
+
+	ofRunApp(game);
 }
