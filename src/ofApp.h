@@ -4,6 +4,7 @@
 #include "ofMain.h"
 #include "font.h"
 #include "panel.h"
+#include "player.h"
 
 class Hackerman : public ofBaseApp {
     void InitPanels();
@@ -18,9 +19,17 @@ class Hackerman : public ofBaseApp {
     void DrawConsolePanel();
     void DrawUtilPanel();
     void DrawMainPanel();
+    void ClearPanelFocus();
     void ClearScreen();
+    void HandleUtilButtonAction(UtilButtonType button_type);
+
+    void PrintToConsole(std::string message);
+    void startMusicLoop();
 
 	public:
+    Player player;
+
+    ofSoundPlayer music_loop;
     Font font_inconsolata14;
 
     ofRectangle screen;
@@ -35,6 +44,7 @@ class Hackerman : public ofBaseApp {
 		void update();
 		void draw();
 
+    void SetResolution(int width, int height);
 		void keyPressed(int key);
 		void keyReleased(int key);
 		void mouseMoved(int x, int y);

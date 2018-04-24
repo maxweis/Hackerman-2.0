@@ -2,18 +2,21 @@
 
 //--------------------------------------------------------------
 void Hackerman::setup(){
-  screen = ofRectangle(0, 0, 1920, 1080); 
+  ofSetFrameRate(60.0);
+
+  ofSetWindowShape(screen.width, screen.height);
 
   ofSetWindowTitle("Hackerman");
 
   font_inconsolata14.load("font/inconsolata.ttf", 14);
+
+  startMusicLoop();
 
   InitPanels();
 }
 
 //--------------------------------------------------------------
 void Hackerman::update(){
-
 }
 
 //--------------------------------------------------------------
@@ -23,7 +26,9 @@ void Hackerman::draw(){
 
 //--------------------------------------------------------------
 void Hackerman::keyPressed(int key){
-
+  if (console_panel.has_focus) {
+    console_panel.current_command << (char) key;
+  }
 }
 
 //--------------------------------------------------------------
@@ -43,7 +48,23 @@ void Hackerman::mouseDragged(int x, int y, int button){
 
 //--------------------------------------------------------------
 void Hackerman::mousePressed(int x, int y, int button){
+  ofRectangle click_rectangle = ofRectangle(x, y, 1, 1);
 
+  for (auto &enemy_panel : enemy_panels) {
+    if (click_rectangle.intersects((ofRectangle) enemy_panel)) {
+      enemy_panel.Focus();
+    }
+  }
+
+  for (auto &util_button : util_buttons) {
+    if (click_rectangle.intersects((ofRectangle) util_button)) {
+      HandleUtilButtonAction((UtilButtonType) util_button.number);
+    }
+  }
+
+  if (click_rectangle.intersects((ofRectangle) console_panel)) {
+    console_panel.Focus();
+  }
 }
 
 //--------------------------------------------------------------
@@ -73,4 +94,9 @@ void Hackerman::gotMessage(ofMessage msg){
 //--------------------------------------------------------------
 void Hackerman::dragEvent(ofDragInfo dragInfo){ 
 
+}
+
+void Hackerman::SetResolution(int width, int height) {
+  screen.width = width;
+  screen.height = height;
 }
