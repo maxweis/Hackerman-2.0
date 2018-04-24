@@ -4,22 +4,35 @@
 #include "enemy.h"
 #include <vector>
 
+enum UtilButtonType {
+  CONNECT,
+  DISCONNECT,
+  FIREWALL_UP,
+  ENCRYPT,
+  FILESYSTEM,
+  STORE,
+  FIREWALL_ATTACK,
+  DECRYPT
+};
+
 class Panel : public ofRectangle {
   public:
     Panel() : has_focus(false) {}
-    Panel(ofRectangle bound) : ofRectangle(bound), has_focus(false) {}
-    Panel(float x, float y, float width, float height) : ofRectangle(x, y, width, height), has_focus(false) {}
+    Panel(ofRectangle bound) : ofRectangle(bound), has_focus(false),
+    background_color(ofColor(0, 0, 0, 255)) {}
+
+    void Focus();
 
     bool has_focus;
+    ofColor background_color;
 };
 
 class EnemyPanel : public Panel {
   public:
     EnemyPanel() {}
     EnemyPanel(ofRectangle bound, int enemy_number)
-      : Panel(bound), enemy_number(enemy_number), name(GetRandomEnemyName()), ip(GetRandomIpString()) {}
-    EnemyPanel(float x, float y, float width, float height, int enemy_number)
-      : Panel(x, y, width, height), enemy_number(enemy_number), name(name), ip(GetRandomIpString()) {}
+      : Panel(bound), enemy_number(enemy_number), name(GetRandomEnemyName()), 
+      ip(GetRandomIpString()) {}
 
     std::string name;
     int enemy_number;
@@ -29,26 +42,25 @@ class EnemyPanel : public Panel {
 class UtilButton : public Panel {
   public:
     UtilButton() {}
-    UtilButton(ofRectangle bound, int row, int column, ofImage *icon) 
-      : Panel(bound), row(row), column(column), icon(icon) {}
-    UtilButton(float x, float y, float width, float height, int row, int column) 
-      : Panel(x, y, width, height), row(row), column() {}
+    UtilButton(ofRectangle bound, int button_number, int row, int column,
+        ofImage *icon) 
+      : Panel(bound), number(button_number), row(row), column(column), 
+      icon(icon) {}
     // ~UtilButton();
 
     std::string title;
     ofImage *icon;
 
-    int row, column;
+    //number int 0-indexed
+    int number, row, column;
 };
 
 class ConsolePanel : public Panel {
   public:
     ConsolePanel() {}
     ConsolePanel(ofRectangle bound) : Panel(bound) {}
-    ConsolePanel(float x, float y, float width, float height) 
-      : Panel(x, y, width, height) {}
 
-    std::vector<std::string> history;
+    std::deque<std::string> history;
     std::stringstream current_command;
 };
 

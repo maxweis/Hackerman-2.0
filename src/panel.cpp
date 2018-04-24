@@ -32,8 +32,9 @@ void Hackerman::InitUtilPanel() {
       //specific button coordinates
       float util_button_x = screen.width - (screen.width * kUtilButtonWidthRatio) + util_button_width * column;
       float util_button_y = row * util_button_height;
+      int button_number = row * kUtilButtonColumns + column;
       ofRectangle util_button_rect = ofRectangle(util_button_x, util_button_y, util_button_width, util_button_height);
-      std::string button_icon_path = kUtilButtonIconPaths[row * kUtilButtonColumns + column];
+      std::string button_icon_path = kUtilButtonIconPaths[button_number];
 
       //add image if present
       ofImage *image = nullptr;
@@ -41,7 +42,7 @@ void Hackerman::InitUtilPanel() {
         image = new ofImage(button_icon_path);
       }
 
-      util_buttons.push_back(UtilButton(util_button_rect, row, column, image));
+      util_buttons.push_back(UtilButton(util_button_rect, button_number, row, column, image));
     }
   }
 }
@@ -63,67 +64,50 @@ void Hackerman::InitPanels() {
   InitMainPanel();
 }
 
-void Hackerman::DrawEnemyPanel() {
-  ofNoFill();
-  ofSetColor(kMainColor);
-  ofSetLineWidth(kLineWidth);
+void Panel::Focus() {
+  auto game_state = (Hackerman*) ofGetAppPtr();
 
-  //ratio of height for y coordinate of enemy panel
-  float name_align_ratio = 3.0 / 4.0;
-  float ip_align_ratio = 1.0 / 3.0;
-  for (EnemyPanel enemy_panel : enemy_panels) {
-    ofDrawRectangle((ofRectangle) enemy_panel);
-    //draw panel number
-    font_inconsolata14.DrawTopLeftAlign(std::to_string(enemy_panel.enemy_number), (ofRectangle) enemy_panel, kMainColor, kBorderWidth);
-    //draw enemy name
-    font_inconsolata14.DrawCenterAlignX(enemy_panel.name, (ofRectangle) enemy_panel, name_align_ratio, kMainColor);
-    //draw enemy ip
-    font_inconsolata14.DrawCenterAlignX(enemy_panel.ip, (ofRectangle) enemy_panel, ip_align_ratio, kMainColor);
+  for (auto &enemy_panel : game_state->enemy_panels) {
+    enemy_panel.has_focus = false;
+  }
+
+  game_state->console_panel.has_focus = false;
+
+  has_focus = true;
+}
+
+void Hackerman::HandleUtilButtonAction(UtilButtonType button_type) {
+  switch (button_type) {
+    case CONNECT:
+      console_panel.history.push_front("Connected to enemies");
+      player.connected = true;
+      break;
+    case DISCONNECT:
+      console_panel.history.push_front("Disconnected from enemies");
+      player.connected = false;
+      break;
+    case FIREWALL_UP:
+      console_panel.history.push_front("Firewall online");
+      player.defense = 1;
+      break;
+    case ENCRYPT:
+      std::cout <<"encrypt"<< std::endl;
+      break;
+    case FILESYSTEM:
+      std::cout <<"filesystem"<< std::endl;
+      break;
+    case STORE:
+      std::cout <<"store"<< std::endl;
+      break;
+    case FIREWALL_ATTACK:
+      std::cout <<"firewall attack"<< std::endl;
+      break;
+    case DECRYPT:
+      std::cout <<"decrypt"<< std::endl;
+      break;
   }
 }
 
-void Hackerman::DrawConsolePanel() {
-  ofNoFill();
-  ofSetColor(kMainColor);
-  ofSetLineWidth(kLineWidth);
-
-  //draw frame
-  ofDrawRectangle((ofRectangle) console_panel);
-  //draw prompt
-  font_inconsolata14.DrawBottomLeftAlign(">>", console_panel.x + kBorderWidth, console_panel.y + console_panel.height - kBorderWidth, kMainColor);
-}
-
-void Hackerman::DrawUtilPanel() {
-  ofNoFill();
-  ofSetLineWidth(kLineWidth);
-  ofSetColor(kWhite);
-
-  for (UtilButton util_button : util_buttons) {
-    //draw borders
-      ofDrawRectangle((ofRectangle) util_button);
-      if (util_button.icon) {
-        //draw icon
-        util_button.icon->draw((ofRectangle) util_button);
-      }
-  }
-}
-
-void Hackerman::DrawMainPanel() {
-  ofNoFill();
-  ofSetColor(kWhite);
-  ofSetLineWidth(kLineWidth);
-
-  //draw border
-  ofDrawRectangle((ofRectangle) main_panel);
-
-  //draw centered example text
-  // font_inconsolata14.DrawCenterAlign("Main area", (ofRectangle) main_panel, kMainColor);
-}
-
-void Hackerman::DrawPanels() {
-  ClearScreen();
-  DrawEnemyPanel();
-  DrawConsolePanel();
-  DrawUtilPanel();
-  DrawMainPanel();
+void Hackerman::PrintToConsole(std::string message) {
+  console_panel.history.push_front(message);
 }
