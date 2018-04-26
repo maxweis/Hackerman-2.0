@@ -7,13 +7,12 @@ Think of a bulky computer terminal with green text quickly scrolling as one "hac
 
 ### Usage
 To run the game, execute the program with these flags: <br>
-*-w*	width_of_window	<br>
-*-h*	height_of_window	<br>
-
+game *[resolution_x] [resolution_y]*
 
 ### Building
 Dependencies :
 * openFrameworks
+* boost
 
 ### Inspiration
 Inspiration by classic "hacking" games such as Hacknet, Sunrise Hackathon, etc.
