@@ -1,6 +1,8 @@
 #include "panel.h"
 #include "ofApp.h"
 #include "enemy.h"
+#include <sstream>
+#include <boost/algorithm/string.hpp>
 
 void Hackerman::InitEnemyPanel() {
   //enemy panel dimensions
@@ -64,31 +66,45 @@ void Hackerman::InitPanels() {
   InitMainPanel();
 }
 
-void Panel::Focus() {
+void EnemyPanel::Focus() {
   auto game_state = (Hackerman*) ofGetAppPtr();
 
-  for (auto &enemy_panel : game_state->enemy_panels) {
-    enemy_panel.has_focus = false;
+  //toggle focus
+  if (!has_focus) {
+    for (auto &enemy_panel : game_state->enemy_panels) {
+      enemy_panel.has_focus = false;
+    }
+
+    has_focus = true;
+  } else {
+    has_focus = false;
   }
-
-  game_state->console_panel.has_focus = false;
-
-  has_focus = true;
 }
 
 void Hackerman::HandleUtilButtonAction(UtilButtonType button_type) {
   switch (button_type) {
     case CONNECT:
-      console_panel.history.push_front("Connected to enemies");
-      player.connected = true;
+      if (!player.connected) {
+        ofSleepMillis(1000);
+        PrintToConsole("Connected to enemies");
+        player.connected = true;
+      }
       break;
     case DISCONNECT:
-      console_panel.history.push_front("Disconnected from enemies");
-      player.connected = false;
+      if (player.connected) {
+        ofSleepMillis(1000);
+        PrintToConsole("Disconnected from enemies");
+        player.connected = false;
+      }
       break;
     case FIREWALL_UP:
-      console_panel.history.push_front("Firewall online");
-      player.defense = 1;
+      if (player.firewall_up) {
+        PrintToConsole("Firewall already deployed");
+      } else {
+        ofSleepMillis(1000);
+        PrintToConsole("Firewall deployed");
+        player.firewall_up = true;
+      }
       break;
     case ENCRYPT:
       std::cout <<"encrypt"<< std::endl;
@@ -100,14 +116,96 @@ void Hackerman::HandleUtilButtonAction(UtilButtonType button_type) {
       std::cout <<"store"<< std::endl;
       break;
     case FIREWALL_ATTACK:
-      std::cout <<"firewall attack"<< std::endl;
-      break;
+      if (player.connected) {
+        std::cout <<"firewall attack"<< std::endl;
+      } else {
+        PrintToConsole("Not connected to enemies");
+      }
+        break;
     case DECRYPT:
-      std::cout <<"decrypt"<< std::endl;
+      if (player.connected) {
+        std::cout <<"decrypt"<< std::endl;
+      } else {
+        PrintToConsole("Not connected to enemies");
+      }
       break;
   }
 }
 
-void Hackerman::PrintToConsole(std::string message) {
-  console_panel.history.push_front(message);
+void Hackerman::PrintToConsole(std::string message, bool console_prefix) {
+  std::string prefix_text = "";
+  if (console_prefix) {
+    prefix_text = "HM 1.9.8: ";
+  }
+
+  console_panel.history.push_front(prefix_text + message);
+}
+
+void Hackerman::ProcessCommand() {
+  std::string command = console_panel.current_command.str();
+  //convert string to lowercase
+  std::transform(command.begin(), command.end(), command.begin(), ::tolower);
+  boost::trim(command);
+
+  //clear current command
+  std::stringstream().swap(console_panel.current_command);
+
+  if (command  == "exit" || command == "quit") {
+    if (console_panel.sh_enabled) {
+      PrintToConsole("sh mode exited");
+      console_panel.sh_enabled = false;
+    } else {
+      ofExit();
+    }
+  }
+  //handle sh commands if in sh mode
+  else if (console_panel.sh_enabled) {
+    PrintToConsole(sh_exec(command));
+  } else if (command == "clear") {
+    console_panel.history.clear();
+  } else if (command == "help") {
+    PrintToConsole("wat a n00b");
+    PrintToConsole("you're on ur own fur now");
+  } else if (command == "") {
+    PrintToConsole("");
+  } else if (command == "sh") {
+    PrintToConsole("sh mode entered");
+    PrintToConsole("");
+    console_panel.sh_enabled = true;
+  } else if (command == "connect") {
+    HandleUtilButtonAction(CONNECT);
+  } else if (command == "disconnect") {
+    HandleUtilButtonAction(DISCONNECT);
+  } else if (command == "firewall up") {
+    HandleUtilButtonAction(FIREWALL_UP);
+  } else if (command == "encrypt") {
+    HandleUtilButtonAction(ENCRYPT);
+  } else if (command == "filesystem") {
+    HandleUtilButtonAction(FILESYSTEM);
+  } else if (command == "store") {
+    HandleUtilButtonAction(STORE);
+  } else if (command == "firewall attack") {
+    HandleUtilButtonAction(FIREWALL_ATTACK);
+  } else if (command == "decrypt") {
+    HandleUtilButtonAction(DECRYPT);
+  } else {
+    PrintToConsole("\"" + command + "\""  " not recognized", true);
+  }
+}
+
+//borrowed from https://stackoverflow.com/questions/478898/how-to-execute-a-command-and-get-output-of-command-within-c-using-posix
+std::string sh_exec(std::string cmd) { 
+  string data;
+  FILE * stream;
+  const int max_buffer = 256;
+  char buffer[max_buffer];
+  cmd.append(" 2>&1");
+
+  stream = popen(cmd.c_str(), "r");
+  if (stream) {
+    while (!feof(stream))
+      if (fgets(buffer, max_buffer, stream) != NULL) data.append(buffer);
+        pclose(stream);
+  }
+  return data;
 }
