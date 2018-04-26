@@ -14,17 +14,23 @@ void Hackerman::DrawConsolePanel() {
 
   //draw frame
   ofDrawRectangle((ofRectangle) console_panel);
-  //draw prompt
-  font_inconsolata14.DrawBottomLeftAlign(">>" + console_panel.current_command.str(), console_panel.x + kBorderWidth, console_panel.y + console_panel.height - kBorderWidth, kMainColor);
+  //draw prompt show as white if focused
+  if (console_panel.has_focus) {
+    font_inconsolata14.DrawBottomLeftAlign(">> " + console_panel.current_command.str(),
+        console_panel.x + kBorderWidth, console_panel.y + console_panel.height - kBorderWidth, kWhite);
+  } else {
+    font_inconsolata14.DrawBottomLeftAlign(">> " + console_panel.current_command.str(), 
+        console_panel.x + kBorderWidth, console_panel.y + console_panel.height - kBorderWidth, kMainColor);
+  }
 
   //get max text size
   ofRectangle font_size = font_inconsolata14.getStringBoundingBox("|", 0, 0);
 
-  int console_columns = (console_panel.height - font_size.height) / (font_size.height);
+  unsigned int console_columns = (console_panel.height - font_size.height) / (font_size.height);
 
-  for (int i = 0; i < console_panel.history.size() && i < console_columns; i++) {
+  for (unsigned int i = 0; i < console_panel.history.size() && i < console_columns; i++) {
     font_inconsolata14.DrawBottomLeftAlign(console_panel.history[i], console_panel.x + kBorderWidth,
-        console_panel.y + console_panel.height - (kBorderWidth * 2) - (i + 1) * font_size.height, kMainColor);
+        console_panel.y + console_panel.height - kBorderWidth - (i + 1) * font_size.height, kMainColor);
   }
 }
 
