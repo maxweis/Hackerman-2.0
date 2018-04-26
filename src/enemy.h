@@ -4,8 +4,13 @@
 #include <iostream>
 
 class Enemy {
-  bool firewall_up;
+  public:
+    bool firewall_up;
 
+    bool defeated;
+    std::string name;
+    int enemy_number;
+    std::string ip;
 };
 
 const int kEnemyAmount = 5;
