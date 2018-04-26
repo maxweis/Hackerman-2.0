@@ -22,8 +22,9 @@ class Hackerman : public ofBaseApp {
     void ClearPanelFocus();
     void ClearScreen();
     void HandleUtilButtonAction(UtilButtonType button_type);
+    void ProcessCommand();
 
-    void PrintToConsole(std::string message);
+    void PrintToConsole(std::string message, bool prefix = false);
     void startMusicLoop();
 
 	public:
