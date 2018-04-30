@@ -24,7 +24,16 @@ class Hackerman : public ofBaseApp {
     void HandleUtilButtonAction(UtilButtonType button_type);
     void ProcessCommand();
 
+    void OpenEncryptInterface();
+    void OpenFilesystemInterface();
+    void OpenStoreInterface();
+    void OpenFirewallAttackInterface();
+    void OpenDecryptInterface();
+
+    ofRectangle RenderCenterAlign(ofImage &image, ofRectangle bound);
+
     void PrintToConsole(std::string message, bool prefix = false);
+    void PrintToConsole(std::vector<std::string> messages);
     void startMusicLoop();
 
 	public:
@@ -58,3 +67,5 @@ class Hackerman : public ofBaseApp {
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 };
+
+const int kShiftKey = 3680;

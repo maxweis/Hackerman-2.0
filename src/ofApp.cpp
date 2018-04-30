@@ -1,6 +1,6 @@
 #include "ofApp.h"
+#include <boost/algorithm/string.hpp>
 
-//--------------------------------------------------------------
 void Hackerman::setup(){
   ofSetFrameRate(60.0);
 
@@ -19,16 +19,13 @@ void Hackerman::setup(){
   PrintToConsole("");
 }
 
-//--------------------------------------------------------------
 void Hackerman::update(){
 }
 
-//--------------------------------------------------------------
 void Hackerman::draw(){
   DrawPanels();
 }
 
-//--------------------------------------------------------------
 void Hackerman::keyPressed(int key){
   if (console_panel.has_focus) {
     if (key == OF_KEY_RETURN) {
@@ -41,29 +38,32 @@ void Hackerman::keyPressed(int key){
       console_panel.current_command.str("");
       console_panel.current_command << command;
     }
+
     //check if key should be displayed in terminal (a-z or space)
-    if (('a' <= key && 'z' >= key) || key == ' ') {
+    if (key >= 'a' && 'z' >= key) {
+      if (ofGetKeyPressed(kShiftKey)) {
+        console_panel.current_command << (char) toupper(key);
+      } else {
+        console_panel.current_command << (char) key;
+      }
+    } else if (('!' <= key && '_' >= key) || key == ' ') {
       console_panel.current_command << (char) key;
     }
   }
 }
 
-//--------------------------------------------------------------
 void Hackerman::keyReleased(int key){
 
 }
 
-//--------------------------------------------------------------
 void Hackerman::mouseMoved(int x, int y ){
 
 }
 
-//--------------------------------------------------------------
 void Hackerman::mouseDragged(int x, int y, int button){
 
 }
 
-//--------------------------------------------------------------
 void Hackerman::mousePressed(int x, int y, int button){
   ofRectangle click_rectangle = ofRectangle(x, y, 1, 1);
 
@@ -86,34 +86,28 @@ void Hackerman::mousePressed(int x, int y, int button){
   }
 }
 
-//--------------------------------------------------------------
 void Hackerman::mouseReleased(int x, int y, int button){
 
 }
 
-//--------------------------------------------------------------
 void Hackerman::mouseEntered(int x, int y){
 
 }
 
-//--------------------------------------------------------------
 void Hackerman::mouseExited(int x, int y){
 
 }
 
-//--------------------------------------------------------------
 void Hackerman::windowResized(int w, int h){
   if (w != screen.width || h != screen.height) {
     ofSetWindowShape(screen.width, screen.height);
   }
 }
 
-//--------------------------------------------------------------
 void Hackerman::gotMessage(ofMessage msg){
 
 }
 
-//--------------------------------------------------------------
 void Hackerman::dragEvent(ofDragInfo dragInfo){ 
 
 }
