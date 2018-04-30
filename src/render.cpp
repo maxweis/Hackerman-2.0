@@ -98,6 +98,19 @@ void Hackerman::DrawEnemyPanel() {
     font_inconsolata14.DrawCenterAlignX(enemy_panel.name, (ofRectangle) enemy_panel, name_align_ratio, panel_color);
     //draw enemy ip
     font_inconsolata14.DrawCenterAlignX(enemy_panel.ip, (ofRectangle) enemy_panel, ip_align_ratio, panel_color);
+
+    ofSleepMillis(100);
   }
 }
 
+ofRectangle Hackerman::RenderCenterAlign(ofImage &image, ofRectangle bound) {
+  float bound_center_x = bound.x + (bound.width / 2);
+  float bound_center_y = bound.y + (bound.height / 2);
+
+  ofRectangle image_box = ofRectangle(bound_center_x, bound_center_y,
+      bound.width, bound.height);
+
+  image.draw(image_box);
+
+  return image_box;
+}
