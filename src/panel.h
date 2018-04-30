@@ -39,6 +39,8 @@ class EnemyPanel : public Panel {
     std::string name;
     int enemy_number;
     std::string ip;
+
+    Enemy enemy;
 };
 
 class UtilButton : public Panel {
@@ -60,13 +62,18 @@ class UtilButton : public Panel {
 class ConsolePanel : public Panel {
   public:
     ConsolePanel() {}
-    ConsolePanel(ofRectangle bound) : Panel(bound), sh_enabled(false) {}
+    ConsolePanel(ofRectangle bound) : Panel(bound), sh_enabled(false),
+    user_prompted(false) {}
 
     std::deque<std::string> history;
     std::stringstream current_command;
+    std::string prompt_answer;
 
     //access sh shell
     bool sh_enabled;
+    bool user_prompted;
+
+    std::vector<std::string> sh_exec(std::string cmd);
 };
 
 //percentage of screen enemy panel takes up horizontally
@@ -81,4 +88,3 @@ int const kUtilButtonAmount = kUtilButtonRows * kUtilButtonRows;
 float const kUtilButtonWidthRatio = 1.0 / 5.0;
 const std::vector<std::string> kUtilButtonIconPaths = {"icons/connect.png", "icons/disconnect.png", "icons/firewall_up.png", "icons/encrypt.png",
 "icons/files.png", "icons/bitcoin.png", "icons/firewall_attack.png", "icons/decrypt.png"};
-std::string sh_exec(std::string cmd);

@@ -1,6 +1,11 @@
 #include "panel.h"
 #include "ofApp.h"
 #include "enemy.h"
+#include <array>
+#include <string>
+#include <memory>
+#include <pstream.h>
+#include <cstdio>
 #include <sstream>
 #include <boost/algorithm/string.hpp>
 
@@ -85,7 +90,6 @@ void Hackerman::HandleUtilButtonAction(UtilButtonType button_type) {
   switch (button_type) {
     case CONNECT:
       if (!player.connected) {
-        ofSleepMillis(1000);
         PrintToConsole("Connected to enemies");
         player.connected = true;
       }
@@ -107,24 +111,24 @@ void Hackerman::HandleUtilButtonAction(UtilButtonType button_type) {
       }
       break;
     case ENCRYPT:
-      std::cout <<"encrypt"<< std::endl;
+      OpenEncryptInterface();
       break;
     case FILESYSTEM:
-      std::cout <<"filesystem"<< std::endl;
+      OpenFilesystemInterface();
       break;
     case STORE:
-      std::cout <<"store"<< std::endl;
+      OpenStoreInterface();
       break;
     case FIREWALL_ATTACK:
       if (player.connected) {
-        std::cout <<"firewall attack"<< std::endl;
+        OpenFirewallAttackInterface();
       } else {
         PrintToConsole("Not connected to enemies");
       }
         break;
     case DECRYPT:
       if (player.connected) {
-        std::cout <<"decrypt"<< std::endl;
+        OpenDecryptInterface();
       } else {
         PrintToConsole("Not connected to enemies");
       }
@@ -141,18 +145,28 @@ void Hackerman::PrintToConsole(std::string message, bool console_prefix) {
   console_panel.history.push_front(prefix_text + message);
 }
 
+void Hackerman::PrintToConsole(std::vector<std::string> messages) {
+  for (std::string message : messages) {
+    console_panel.history.push_front(message);
+  }
+}
+
 void Hackerman::ProcessCommand() {
   std::string command = console_panel.current_command.str();
-  //convert string to lowercase
-  std::transform(command.begin(), command.end(), command.begin(), ::tolower);
+
+  //convert string to lowercase if not in sh mode
+  if (!console_panel.sh_enabled) {
+    boost::to_lower(command);
+  }
   boost::trim(command);
 
   //clear current command
   std::stringstream().swap(console_panel.current_command);
 
-  if (command  == "exit" || command == "quit") {
+  else if (command  == "exit" || command == "quit") {
     if (console_panel.sh_enabled) {
       PrintToConsole("sh mode exited");
+      PrintToConsole("");
       console_panel.sh_enabled = false;
     } else {
       ofExit();
@@ -160,7 +174,7 @@ void Hackerman::ProcessCommand() {
   }
   //handle sh commands if in sh mode
   else if (console_panel.sh_enabled) {
-    PrintToConsole(sh_exec(command));
+    PrintToConsole(console_panel.sh_exec(command));
   } else if (command == "clear") {
     console_panel.history.clear();
   } else if (command == "help") {
@@ -193,19 +207,38 @@ void Hackerman::ProcessCommand() {
   }
 }
 
-//borrowed from https://stackoverflow.com/questions/478898/how-to-execute-a-command-and-get-output-of-command-within-c-using-posix
-std::string sh_exec(std::string cmd) { 
-  string data;
-  FILE * stream;
-  const int max_buffer = 256;
-  char buffer[max_buffer];
-  cmd.append(" 2>&1");
+//inspired by https://stackoverflow.com/questions/478898/how-to-execute-a-command-and-get-output-of-command-within-c-using-posix
+std::vector<std::string> ConsolePanel::sh_exec(std::string cmd) { 
+  redi::ipstream proc(cmd.c_str(), redi::pstreams::pstdout | redi::pstreams::pstderr);
+  std::string line;
+  std::vector<std::string> command_output;
 
-  stream = popen(cmd.c_str(), "r");
-  if (stream) {
-    while (!feof(stream))
-      if (fgets(buffer, max_buffer, stream) != NULL) data.append(buffer);
-        pclose(stream);
+  while (std::getline(proc.out(), line)) {
+    command_output.push_back(line);
   }
-  return data;
+
+  while (std::getline(proc.err(), line)) {
+    command_output.push_back(line);
+  }
+
+  command_output.push_back("\n");
+  return command_output;
+}
+
+void Hackerman::OpenEncryptInterface() {
+  PrintToConsole("Enter encryption password:");
+  console_panel.user_prompted = true;
+}
+
+
+void Hackerman::OpenStoreInterface() {
+
+}
+
+void Hackerman::OpenFirewallAttackInterface() {
+
+}
+
+void Hackerman::OpenDecryptInterface() {
+
 }
