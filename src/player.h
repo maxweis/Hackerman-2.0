@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 
 std::string RandomString(int length);
