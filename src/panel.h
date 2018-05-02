@@ -23,22 +23,19 @@ class Panel : public ofRectangle {
 
     virtual void Focus() { has_focus = !has_focus; }
 
+    //current operation
+    UtilButtonType state;
+
     bool has_focus;
     ofColor background_color;
 };
 
 class EnemyPanel : public Panel {
   public:
-    EnemyPanel() {}
     EnemyPanel(ofRectangle bound, int enemy_number)
-      : Panel(bound), name(GetRandomEnemyName()), enemy_number(enemy_number),
-      ip(GetRandomIpString()) {}
+      : Panel(bound), enemy(Enemy(enemy_number)) {}
 
     void Focus() override;
-
-    std::string name;
-    int enemy_number;
-    std::string ip;
 
     Enemy enemy;
 };

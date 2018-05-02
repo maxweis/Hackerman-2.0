@@ -163,7 +163,7 @@ void Hackerman::ProcessCommand() {
   //clear current command
   std::stringstream().swap(console_panel.current_command);
 
-  else if (command  == "exit" || command == "quit") {
+  if (command  == "exit" || command == "quit") {
     if (console_panel.sh_enabled) {
       PrintToConsole("sh mode exited");
       PrintToConsole("");
@@ -226,10 +226,25 @@ std::vector<std::string> ConsolePanel::sh_exec(std::string cmd) {
 }
 
 void Hackerman::OpenEncryptInterface() {
-  PrintToConsole("Enter encryption password:");
-  console_panel.user_prompted = true;
-}
+  if (current_dir.name != "/etc") {
+    PrintToConsole("File not found to encrypt");
+  } else {
+    if (!console_panel.user_prompted) {
+      PrintToConsole("Enter encryption password:");
+      console_panel.user_prompted = true;
+      console_panel.state = ENCRYPT;
+    } else {
+      //register user input
+      player.password = console_panel.current_command.str();
+      boost::trim(player.password);
+      //clear current input to console
+      console_panel.current_command.str("");
 
+      console_panel.user_prompted = false;
+      PrintToConsole("Password file successfully encrypted");
+    }
+  }
+}
 
 void Hackerman::OpenStoreInterface() {
 
@@ -240,5 +255,15 @@ void Hackerman::OpenFirewallAttackInterface() {
 }
 
 void Hackerman::OpenDecryptInterface() {
+  if (!console_panel.user_prompted) {
+    PrintToConsole("Enter decryption password:");
+    console_panel.user_prompted = true;
+    console_panel.state = DECRYPT;
+  } else {
+    boost::trim(player.password);
+    //clear current input to console
+    console_panel.current_command.str("");
 
+    console_panel.user_prompted = false;
+  }
 }
