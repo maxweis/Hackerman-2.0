@@ -90,23 +90,25 @@ void Hackerman::HandleUtilButtonAction(UtilButtonType button_type) {
   switch (button_type) {
     case CONNECT:
       if (!player.connected) {
-        PrintToConsole("Connected to enemies");
+        ofSleepMillis(500);
+        PrintToConsole("Connected to enemies.");
         player.connected = true;
       }
       break;
     case DISCONNECT:
       if (player.connected) {
-        ofSleepMillis(1000);
-        PrintToConsole("Disconnected from enemies");
+        ofSleepMillis(500);
+        PrintToConsole("Disconnected from enemies. Enemy firewalls restored.");
+        RestoreEnemyFirewalls();
         player.connected = false;
       }
       break;
     case FIREWALL_UP:
       if (player.firewall_up) {
-        PrintToConsole("Firewall already deployed");
+        PrintToConsole("Firewall already deployed.");
       } else {
-        ofSleepMillis(1000);
-        PrintToConsole("Firewall deployed");
+        ofSleepMillis(500);
+        PrintToConsole("Firewall deployed.");
         player.firewall_up = true;
       }
       break;
@@ -123,14 +125,14 @@ void Hackerman::HandleUtilButtonAction(UtilButtonType button_type) {
       if (player.connected) {
         OpenFirewallAttackInterface();
       } else {
-        PrintToConsole("Not connected to enemies");
+        PrintToConsole("Not connected to enemies.");
       }
         break;
     case DECRYPT:
       if (player.connected) {
         OpenDecryptInterface();
       } else {
-        PrintToConsole("Not connected to enemies");
+        PrintToConsole("Not connected to enemies.");
       }
       break;
   }
@@ -182,10 +184,13 @@ void Hackerman::ProcessCommand() {
     PrintToConsole("you're on ur own fur now");
   } else if (command == "") {
     PrintToConsole("");
-  } else if (command == "sh") {
+  } else if (command == "sh" && player.sh_unlocked) {
     PrintToConsole("sh mode entered");
     PrintToConsole("");
     console_panel.sh_enabled = true;
+  } else if (command == "maxiscool") {
+    //cheat code 
+    player.sh_unlocked = true;
   } else if (command == "connect") {
     HandleUtilButtonAction(CONNECT);
   } else if (command == "disconnect") {
@@ -227,7 +232,7 @@ std::vector<std::string> ConsolePanel::sh_exec(std::string cmd) {
 
 void Hackerman::OpenEncryptInterface() {
   if (current_dir.name != "/etc") {
-    PrintToConsole("File not found to encrypt");
+    PrintToConsole("File not found to encrypt.");
   } else {
     if (!console_panel.user_prompted) {
       PrintToConsole("Enter encryption password:");
@@ -241,13 +246,14 @@ void Hackerman::OpenEncryptInterface() {
       console_panel.current_command.str("");
 
       console_panel.user_prompted = false;
-      PrintToConsole("Password file successfully encrypted");
+      player.password_encrypted = true;
+      PrintToConsole("Password file successfully encrypted.");
     }
   }
 }
 
 void Hackerman::OpenStoreInterface() {
-
+  main_panel.state = STORE;
 }
 
 void Hackerman::OpenFirewallAttackInterface() {
@@ -255,14 +261,32 @@ void Hackerman::OpenFirewallAttackInterface() {
 }
 
 void Hackerman::OpenDecryptInterface() {
+  if (!GetFocusedEnemy()) {
+    PrintToConsole("No enemy selected");
+    return;
+  }
+
+  Enemy *enemy = GetFocusedEnemy();
+
+  if (enemy->firewall_up) {
+    PrintToConsole("Can not decrypt enemy's password, their firewall is up.");
+    return;
+  }
+
   if (!console_panel.user_prompted) {
     PrintToConsole("Enter decryption password:");
     console_panel.user_prompted = true;
     console_panel.state = DECRYPT;
   } else {
-    boost::trim(player.password);
+    std::string password = console_panel.current_command.str();
+    boost::trim(password);
+
     //clear current input to console
     console_panel.current_command.str("");
+
+    if (PasswordGuess(password, enemy->password)) {
+      DefeatEnemy(*enemy);
+    }
 
     console_panel.user_prompted = false;
   }

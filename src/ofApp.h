@@ -6,6 +6,7 @@
 #include "panel.h"
 #include "player.h"
 #include "filesystem.h"
+#include "enemy.h"
 
 class Hackerman : public ofBaseApp {
     void InitPanels();
@@ -30,6 +31,14 @@ class Hackerman : public ofBaseApp {
     void HandleUtilButtonAction(UtilButtonType button_type);
     void ProcessCommand();
     void ResizeFileImages(int columns);
+
+    void UpdateEnemies();
+    void UpdatePlayer();
+    Enemy *GetFocusedEnemy();
+    int EnemiesAlive();
+    bool PasswordGuess(std::string guess, std::string password);
+    void RestoreEnemyFirewalls();
+    void DefeatEnemy(Enemy &enemy);
 
     void OpenEncryptInterface();
     void OpenFilesystemInterface();
@@ -81,4 +90,5 @@ class Hackerman : public ofBaseApp {
 		void gotMessage(ofMessage msg);
 };
 
+const int kFPS = 60;
 const int kShiftKey = 3680;

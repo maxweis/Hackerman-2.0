@@ -2,16 +2,11 @@
 
 #include <vector>
 #include <iostream>
+#include "player.h"
+#include "ofMain.h"
 
-class Enemy {
-  public:
-    bool firewall_up;
-
-    bool defeated;
-    std::string name;
-    int enemy_number;
-    std::string ip;
-};
+std::string GetRandomEnemyName();
+std::string GetRandomIpString();
 
 const int kEnemyAmount = 5;
 
@@ -21,5 +16,17 @@ const std::string kEnemyNames[] = {"L33T HX0R", "[spunge]", "Left Handed Jimmy",
 "8\"", "bup bup bup", "king jellybean", "flawed_human", "meeseeks", "munk", "lienux",
 "dota_john", "gaudy gus"};
 
-std::string GetRandomEnemyName();
-std::string GetRandomIpString();
+class Enemy {
+  public:
+    Enemy(int enemy_number) : name(GetRandomEnemyName()), password(GetRandomPassword(5)),
+        number(enemy_number), bitcoin((int) ofRandom(1, 3)), ip(GetRandomIpString()),
+        firewall_up(false), defeated(false) {}
+
+    std::string name;
+    std::string password;
+    int number;
+    int bitcoin;
+    std::string ip;
+    bool firewall_up;
+    bool defeated;
+};

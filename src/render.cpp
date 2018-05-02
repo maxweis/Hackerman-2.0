@@ -84,6 +84,11 @@ void Hackerman::DrawEnemyPanel() {
   float name_align_ratio = 3.0 / 4.0;
   float ip_align_ratio = 1.0 / 3.0;
   for (EnemyPanel enemy_panel : enemy_panels) {
+    //do not draw panel if defeated
+    if (enemy_panel.enemy.defeated) {
+      continue;
+    }
+
     ofColor panel_color = kMainColor;
     ofSetColor(kMainColor);
 

@@ -3,7 +3,7 @@
 #include "filesystem.h"
 
 void Hackerman::setup(){
-  ofSetFrameRate(60.0);
+  ofSetFrameRate(kFPS);
 
   ofSetWindowShape(screen.width, screen.height);
 
@@ -18,6 +18,7 @@ void Hackerman::setup(){
   filesystem_images = std::vector<ofImage>(3, ofImage());
   InitFileImages();
   InitFilesystem();
+  main_panel.state = FILESYSTEM;
 
   PrintToConsole("Welcome to the Hackerman 1.9.8 Mainframe");
   PrintToConsole("Type \"help\" for usage instructions");
@@ -25,6 +26,10 @@ void Hackerman::setup(){
 }
 
 void Hackerman::update(){
+  if (player.connected) {
+    UpdateEnemies();
+  }
+  UpdatePlayer();
 }
 
 void Hackerman::draw(){
@@ -96,18 +101,17 @@ void Hackerman::mousePressed(int x, int y, int button){
   }
 
   if (main_panel.state == FILESYSTEM) {
-    for (signed int i = 0; i < current_dir.files.size(); i++) {
+    for (unsigned int i = 0; i < current_dir.files.size(); i++) {
       if (click_rectangle.intersects(current_dir.files[i].bound)) {
-        switch (current_dir.files[i].file_type) {
-          case FOLDER:
+        if (current_dir.files[i].file_type == FOLDER) {
             current_dir = File(current_dir.files[i]);
-            break;
-          case EXECUTABLE:
-            HandleUtilButtonAction(current_dir.files[i].program);
-            break;
         }
+        if (current_dir.files[i].file_type == EXECUTABLE) {}
+            HandleUtilButtonAction(current_dir.files[i].program);
       }
     }
+  } else if (main_panel.state == STORE) {
+
   }
 }
 

@@ -2,19 +2,23 @@
 
 #include <iostream>
 
-std::string RandomString(int length);
+std::string GetRandomPassword(int length);
 
 class Player {
   public:
-    Player() : bitcoin(0), password(RandomString(10)), connected(false),
-    firewall_up(false), attack(1), defense(0){}
+    Player() : bitcoin(0), password(GetRandomPassword(10)), connected(false),
+    firewall_up(true), password_encrypted(false), sh_unlocked(false), defense(0){}
 
     int bitcoin;
     std::string password;
 
+    //connected to enemies
     bool connected;
     bool firewall_up;
+    bool password_encrypted;
+    bool defeated;
+    //sh mode bought from store or unlocked via cheat code
+    bool sh_unlocked;
 
-    int attack;
     int defense;
 };
