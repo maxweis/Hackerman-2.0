@@ -1,5 +1,6 @@
 #include "ofApp.h"
 #include <boost/algorithm/string.hpp>
+#include "filesystem.h"
 
 void Hackerman::setup(){
   ofSetFrameRate(60.0);
@@ -13,6 +14,10 @@ void Hackerman::setup(){
   startMusicLoop();
 
   InitPanels();
+
+  filesystem_images = std::vector<ofImage>(3, ofImage());
+  InitFileImages();
+  InitFilesystem();
 
   PrintToConsole("Welcome to the Hackerman 1.9.8 Mainframe");
   PrintToConsole("Type \"help\" for usage instructions");
@@ -29,8 +34,13 @@ void Hackerman::draw(){
 void Hackerman::keyPressed(int key){
   if (console_panel.has_focus) {
     if (key == OF_KEY_RETURN) {
-      ProcessCommand();
+      if (console_panel.user_prompted) {
+        HandleUtilButtonAction(console_panel.state);
+      } else {
+        ProcessCommand();
+      }
     }
+
     if (key == OF_KEY_BACKSPACE) {
       //clear last character of current command stringstream
       std::string command = console_panel.current_command.str();
@@ -83,6 +93,21 @@ void Hackerman::mousePressed(int x, int y, int button){
 
   if (click_rectangle.intersects((ofRectangle) console_panel)) {
     console_panel.Focus();
+  }
+
+  if (main_panel.state == FILESYSTEM) {
+    for (signed int i = 0; i < current_dir.files.size(); i++) {
+      if (click_rectangle.intersects(current_dir.files[i].bound)) {
+        switch (current_dir.files[i].file_type) {
+          case FOLDER:
+            current_dir = File(current_dir.files[i]);
+            break;
+          case EXECUTABLE:
+            HandleUtilButtonAction(current_dir.files[i].program);
+            break;
+        }
+      }
+    }
   }
 }
 
