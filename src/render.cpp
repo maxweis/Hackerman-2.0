@@ -58,7 +58,9 @@ void Hackerman::DrawMainPanel() {
   ofDrawRectangle((ofRectangle) main_panel);
 
   //draw centered example text
-  // font_inconsolata14.DrawCenterAlign("Main area", (ofRectangle) main_panel, kMainColor);
+  if (main_panel.state == FILESYSTEM) {
+    DrawFilesystemInterface();
+  }
 }
 
 void Hackerman::DrawPanels() {
@@ -93,22 +95,36 @@ void Hackerman::DrawEnemyPanel() {
     }
 
     //draw panel number, get box drawn in
-    font_inconsolata14.DrawTopLeftAlign(std::to_string(enemy_panel.enemy_number), (ofRectangle) enemy_panel, panel_color, kBorderWidth);
+    font_inconsolata14.DrawTopLeftAlign(std::to_string(enemy_panel.enemy.number), (ofRectangle) enemy_panel, panel_color, kBorderWidth);
     //draw enemy name
-    font_inconsolata14.DrawCenterAlignX(enemy_panel.name, (ofRectangle) enemy_panel, name_align_ratio, panel_color);
+    font_inconsolata14.DrawCenterAlignX(enemy_panel.enemy.name, (ofRectangle) enemy_panel, name_align_ratio, panel_color);
     //draw enemy ip
-    font_inconsolata14.DrawCenterAlignX(enemy_panel.ip, (ofRectangle) enemy_panel, ip_align_ratio, panel_color);
-
-    ofSleepMillis(100);
+    font_inconsolata14.DrawCenterAlignX(enemy_panel.enemy.ip, (ofRectangle) enemy_panel, ip_align_ratio, panel_color);
   }
 }
 
-ofRectangle Hackerman::RenderCenterAlign(ofImage &image, ofRectangle bound) {
-  float bound_center_x = bound.x + (bound.width / 2);
-  float bound_center_y = bound.y + (bound.height / 2);
+ofRectangle Hackerman::DrawCenterAlign(ofImage &image, ofRectangle bound) {
+  ofSetColor(kWhite);
+
+  float bound_center_x = bound.x + (bound.width / 2) - (image.getWidth() / 2);
+  float bound_center_y = bound.y + (bound.height / 2) - (image.getHeight() / 2);
 
   ofRectangle image_box = ofRectangle(bound_center_x, bound_center_y,
-      bound.width, bound.height);
+      image.getWidth(), image.getHeight());
+
+  image.draw(image_box);
+
+  return image_box;
+}
+
+ofRectangle Hackerman::DrawCenterAlignX(ofImage &image, ofRectangle bound, float y_ratio) {
+  ofSetColor(kWhite);
+
+  float bound_center_x = bound.x + (bound.width / 2) - (image.getWidth() / 2);
+  float bound_y = bound.y + (bound.height * y_ratio) - (image.getHeight() / 2);
+
+  ofRectangle image_box = ofRectangle(bound_center_x, bound_y,
+    image.getWidth(), image.getHeight());
 
   image.draw(image_box);
 
