@@ -38,7 +38,7 @@ void Hackerman::InitFilesystem() {
   bin_contents.push_back(File("store", STORE));
 
   std::vector<File> etc_contents;
-  etc_contents.push_back(File("password"));
+  etc_contents.push_back(File("bitcoin_wallet"));
 
   std::vector<File> home_contents;
   home_contents.push_back(File("max", std::vector<File>()));
