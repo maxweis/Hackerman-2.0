@@ -25,14 +25,14 @@ void Hackerman::UpdatePlayer() {
   if (!player.password_encrypted && !player.firewall_up) {
     player.defeated = true;
     PrintToConsole("You have failed. The enemies defeated you.");
-    draw();
-    ofSleepMillis(5000);
+    std::cout << "You have failed. The enemies defeated you." << std::endl;
+    ofExit(0);
   }
 
   //check if player has won
   if (EnemiesAlive() == 0) {
     PrintToConsole("You have succeeded. You have defeated all of the enemies.");
-    draw();
-    ofSleepMillis(50000);
+    std::cout << "You have succeeded. You have defeated all of the enemies." << std::endl;
+    ofExit(0);
   }
 }

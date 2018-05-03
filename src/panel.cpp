@@ -182,7 +182,7 @@ void Hackerman::ProcessCommand() {
     console_panel.history.clear();
   } else if (command == "help") {
     PrintToConsole("wat a n00b");
-    PrintToConsole("forl real view README.md for instructions");
+    PrintToConsole("for real view README.md for instructions");
   } else if (command == "") {
     PrintToConsole("");
   } else if (command == "sh" && player.sh_unlocked) {
