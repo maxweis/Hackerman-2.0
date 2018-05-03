@@ -3,12 +3,14 @@
 #include "ofMain.h"
 #include "ofApp.h"
 
+//return the name of a random enemy which has not been defeated
 std::string Hackerman::GetRandomLivingEnemyName() {
   std::string name;
   int random_enemy_number;
+
   do {
-  random_enemy_number = ofRandom(0, enemy_panels.size());
-  name = enemy_panels[random_enemy_number].enemy.name;
+    random_enemy_number = ofRandom(0, enemy_panels.size());
+    name = enemy_panels[random_enemy_number].enemy.name;
   } while (enemy_panels[random_enemy_number].enemy.defeated);
 
   return enemy_panels[random_enemy_number].enemy.name;
@@ -35,6 +37,7 @@ std::string GetRandomEnemyName() {
   return kEnemyNames[random_index];
 }
 
+//return a fake ip string for enemies
 std::string GetRandomIpString() {
   std::ostringstream ip_address;
 
@@ -60,7 +63,7 @@ void Hackerman::UpdateEnemies() {
     }
   }
 
-  //enemies randomly attack player
+  //enemies randomly attack player, based on player upgrades
   int probability = ofRandom(0, 1800 * player.defense);
   if (probability == 1) {
     if (player.firewall_up) {
@@ -97,6 +100,7 @@ int Hackerman::EnemiesAlive() {
   return enemies_alive;
 }
 
+//user interface for bruteforcing password when decrypting
 bool Hackerman::PasswordGuess(std::string guess, std::string password) {
   if (guess.length() != password.length()) {
     PrintToConsole("Password length is " + std::to_string(password.length()));
@@ -126,6 +130,7 @@ void Hackerman::RestoreEnemyFirewalls() {
   }
 }
 
+//called when enemy defeated
 void Hackerman::DefeatEnemy(Enemy &enemy) {
   enemy.defeated = true;
   PrintToConsole(enemy.name + "'s Bitcoin wallet has been decrypted. \

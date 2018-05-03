@@ -7,6 +7,7 @@ void Hackerman::OpenFilesystemInterface() {
   current_dir = File(fs_root);
 }
 
+//initialize images used in the filesystem
 void Hackerman::InitFileImages() {
   filesystem_images = std::vector<ofImage>(EXECUTABLE + 1, ofImage());
   filesystem_images[FOLDER].load(kFolderImagePath);
@@ -27,6 +28,7 @@ void Hackerman::ResizeFileImages(int columns) {
   filesystem_images[EXECUTABLE].resize(image_size, image_size);
 }
 
+//initialize filesystem structure inspired by Unix fs structure
 void Hackerman::InitFilesystem() {
   fs_root = File("/", std::vector<File>());
   std::vector<File> bin_contents;
@@ -59,6 +61,7 @@ void Hackerman::DrawFilesystemInterface() {
   DrawDirectory();
 }
 
+//draw entire current_dir onto main_panel
 void Hackerman::DrawDirectory() {
   ResizeFileImages(current_dir.files.size());
   ofRectangle file_bound;

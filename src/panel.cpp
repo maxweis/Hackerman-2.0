@@ -86,6 +86,7 @@ void EnemyPanel::Focus() {
   }
 }
 
+//handle buttons pressed on panel on right side of screen
 void Hackerman::HandleUtilButtonAction(UtilButtonType button_type) {
   switch (button_type) {
     case CONNECT:
@@ -181,7 +182,7 @@ void Hackerman::ProcessCommand() {
     console_panel.history.clear();
   } else if (command == "help") {
     PrintToConsole("wat a n00b");
-    PrintToConsole("forl real view README.md for instructions")
+    PrintToConsole("forl real view README.md for instructions");
   } else if (command == "") {
     PrintToConsole("");
   } else if (command == "sh" && player.sh_unlocked) {
@@ -253,6 +254,7 @@ void Hackerman::OpenEncryptInterface() {
   }
 }
 
+//attacking enemy firewall interface
 void Hackerman::OpenFirewallAttackInterface() {
   Enemy *enemy = GetFocusedEnemy();
 

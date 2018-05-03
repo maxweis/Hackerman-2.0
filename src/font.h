@@ -15,6 +15,4 @@ class Font : public ofTrueTypeFont {
   ofRectangle DrawCenterAlign(std::string text, ofRectangle rect, ofColor color);
   ofRectangle DrawCenterAlignX(std::string text, ofRectangle bound, float y_ratio, ofColor color);
   ofRectangle DrawBottomLeftAlign(std::string text, float x, float y, ofColor color);
-  ofRectangle DrawBoxedTextCenterX(std::string text, ofRectangle bound, float y_ratio,
-    int border, int line_width, ofColor color);
 };

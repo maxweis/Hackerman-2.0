@@ -110,6 +110,7 @@ void Hackerman::DrawEnemyPanel() {
   }
 }
 
+//center align image on screen
 ofRectangle Hackerman::DrawCenterAlign(ofImage &image, ofRectangle bound) {
   ofSetColor(kWhite);
 
@@ -124,6 +125,7 @@ ofRectangle Hackerman::DrawCenterAlign(ofImage &image, ofRectangle bound) {
   return image_box;
 }
 
+//align image to center with a ratio for the y coordinate on the bound
 ofRectangle Hackerman::DrawCenterAlignX(ofImage &image, ofRectangle bound, float y_ratio) {
   ofSetColor(kWhite);
 

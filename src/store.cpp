@@ -1,6 +1,7 @@
 #include "store.h"
 #include "ofApp.h"
 
+//load images used in the store
 void Hackerman::InitStoreImages() {
   upgrade_images = std::vector<ofImage>(SH_UPGRADE + 1, ofImage());
   float image_size = main_panel.height / (upgrade_images.size() * 2);
@@ -12,6 +13,7 @@ void Hackerman::InitStoreImages() {
   upgrade_images[1].resize(image_size, image_size);
 }
 
+//create upgrade objects
 void Hackerman::InitUpgrades() {
   upgrades.push_back(Upgrade(3, FIREWALL_UPGRADE));
   upgrades.push_back(Upgrade(5, SH_UPGRADE));
@@ -45,6 +47,7 @@ void Hackerman::DrawStoreInterface() {
   }
 }
 
+//handle user attempting to buy an upgrade
 void Hackerman::BuyUpgrade(UpgradeType type) {
   if (player.bitcoin < upgrades[type].cost) {
     PrintToConsole("You do not have enough bitcoin for this upgrade.");

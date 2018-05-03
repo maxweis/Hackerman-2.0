@@ -52,18 +52,3 @@ ofRectangle Font::DrawBottomLeftAlign(std::string text, float x, float y, ofColo
 
   return text_box;
 }
-
-ofRectangle Font::DrawBoxedTextCenterX(std::string text, ofRectangle bound, float y_ratio,
-    int border, int line_width, ofColor color) {
-  ofRectangle box = DrawCenterAlignX(text, bound, y_ratio, color);
-  box.x -= (border / 2);
-  box.y -= (border / 2);
-  box.width += border;
-  box.height += border;
-
-  ofSetColor(color);
-  ofSetLineWidth(line_width);
-  ofDrawRectangle(box);
-
-  return box;
-}

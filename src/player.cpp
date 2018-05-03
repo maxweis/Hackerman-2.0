@@ -20,6 +20,7 @@ std::string GetRandomPassword(int length)
     return str;
 }
 
+//check and update the state of the player
 void Hackerman::UpdatePlayer() {
   if (!player.password_encrypted && !player.firewall_up) {
     player.defeated = true;
@@ -28,6 +29,7 @@ void Hackerman::UpdatePlayer() {
     ofSleepMillis(5000);
   }
 
+  //check if player has won
   if (EnemiesAlive() == 0) {
     PrintToConsole("You have succeeded. You have defeated all of the enemies.");
     draw();

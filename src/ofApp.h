@@ -10,6 +10,7 @@
 #include "store.h"
 
 class Hackerman : public ofBaseApp {
+  //init functions
     void InitPanels();
     void InitEnemyPanel();
     void InitConsolePanel();
@@ -21,6 +22,7 @@ class Hackerman : public ofBaseApp {
     void InitStoreImages();
     void startMusicLoop();
 
+    //rendering related functions
     void DrawMenu();
     void DrawPanels();
     void DrawEnemyPanel();
@@ -31,10 +33,17 @@ class Hackerman : public ofBaseApp {
     void DrawDirectory();
     void ClearPanelFocus();
     void ClearScreen();
-    void HandleUtilButtonAction(UtilButtonType button_type);
     void ProcessCommand();
     void ResizeFileImages(int columns);
+    void DrawFilesystemInterface();
+    void DrawStoreInterface();
+    ofRectangle DrawCenterAlign(ofImage &image, ofRectangle bound);
+    ofRectangle DrawCenterAlignX(ofImage &image, ofRectangle bound, float y_ratio);
+    void PrintToConsole(std::string message, bool prefix = false);
+    void PrintToConsole(std::vector<std::string> messages);
 
+    //interface and state update functions
+    void HandleUtilButtonAction(UtilButtonType button_type);
     void UpdateEnemies();
     void UpdatePlayer();
     Enemy *GetFocusedEnemy();
@@ -44,11 +53,8 @@ class Hackerman : public ofBaseApp {
     void DefeatEnemy(Enemy &enemy);
     void BuyUpgrade(UpgradeType type);
     std::string GetRandomLivingEnemyName();
-
     void OpenEncryptInterface();
     void OpenFilesystemInterface();
-    void DrawFilesystemInterface();
-    void DrawStoreInterface();
     void OpenStoreInterface();
     void OpenFirewallAttackInterface();
     void OpenDecryptInterface();
@@ -62,12 +68,6 @@ class Hackerman : public ofBaseApp {
     std::vector<ofImage> upgrade_images;
 
     std::vector<Upgrade> upgrades;
-
-    ofRectangle DrawCenterAlign(ofImage &image, ofRectangle bound);
-    ofRectangle DrawCenterAlignX(ofImage &image, ofRectangle bound, float y_ratio);
-
-    void PrintToConsole(std::string message, bool prefix = false);
-    void PrintToConsole(std::vector<std::string> messages);
 	public:
     Player player;
 

@@ -42,6 +42,7 @@ void Hackerman::draw(){
 }
 
 void Hackerman::keyPressed(int key){
+  //console input controls
   if (console_panel.has_focus) {
     if (key == OF_KEY_RETURN) {
       if (console_panel.user_prompted) {
@@ -106,6 +107,7 @@ void Hackerman::mousePressed(int x, int y, int button){
   }
 
   if (main_panel.state == FILESYSTEM) {
+    //check directories to see if clicked
     for (unsigned int i = 0; i < current_dir.files.size(); i++) {
       if (click_rectangle.intersects(current_dir.files[i].bound)) {
         if (current_dir.files[i].file_type == FOLDER) {
@@ -115,7 +117,8 @@ void Hackerman::mousePressed(int x, int y, int button){
             HandleUtilButtonAction(current_dir.files[i].program);
       }
     }
-  } else if (main_panel.state == STORE) {
+  } else if (main_panel.state == STORE) { 
+    //check upgrades to see if clicked
     for (unsigned int i = 0; i < upgrades.size(); i++) {
       if (click_rectangle.intersects(upgrades[i].bound)) {
         BuyUpgrade(upgrades[i].type);
