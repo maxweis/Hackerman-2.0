@@ -46,17 +46,24 @@ void Hackerman::DrawStoreInterface() {
 }
 
 void Hackerman::BuyUpgrade(UpgradeType type) {
-  if (player.bitcoin > upgrades[type].cost) {
-    player.bitcoin -= upgrades[type].cost;
+  if (player.bitcoin < upgrades[type].cost) {
+    PrintToConsole("You do not have enough bitcoin for this upgrade.");
+  } else if (player.bitcoin > upgrades[type].cost) {
     switch (type) {
       case FIREWALL_UPGRADE:
         player.defense++;
         PrintToConsole("A firewall upgrade has been unlocked.");
+        player.bitcoin -= upgrades[type].cost;
         break;
 
       case SH_UPGRADE:
-        player.sh_unlocked = true;
-        PrintToConsole("Enhanced terminal has been unlocked. Type 'sh' for access.");
+        if (!player.sh_unlocked) {
+          player.sh_unlocked = true;
+          PrintToConsole("Enhanced terminal has been unlocked. Type 'sh' for access.");
+          player.bitcoin -= upgrades[type].cost;
+        } else {
+          PrintToConsole("You have already acquired this upgrade.");
+        }
         break;
     }
   }
