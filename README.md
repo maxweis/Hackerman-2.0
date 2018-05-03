@@ -33,7 +33,7 @@ Dependencies :
 
 Have openFrameworks and boost libraries installed on your computer and place
 this project directory into your `apps` directory of your openFrameworks build. <br>
-Then to build on Unix based operating systems use the following commands:
+Then to build on Unix-based operating systems use the following commands:
   <br>
 `cd final-project-maxweis`
 <br>`make`
