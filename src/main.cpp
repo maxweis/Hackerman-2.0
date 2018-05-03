@@ -2,8 +2,8 @@
 #include "ofApp.h"
 
 int main(int argc, char *argv[]){
-  int screen_width = 1366;
-  int screen_height = 768;
+  int screen_width = 1920;
+  int screen_height = 1080;
 
   if (argc >= 3) {
     screen_width = std::stoi(argv[1]);
