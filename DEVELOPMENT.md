@@ -1,11 +1,5 @@
 # Development progress
 
-## To do
-* Improve commands
-* Design firewall attack puzzle
-* Design encrypt, decrypt, filesystem, store interfaces
-* Improve enemy object decomposition for better attack, decrypt implementation
-
 ## Completed tasks
 * Design easily-modifiable, resolution-independent game interface panels
 * Create random fake IP, name generators
@@ -17,3 +11,7 @@
 * Create Player class with Bitcoin wallet, upgrade status, etc.
 * Create command line panel interface including commands
 * Finish gameplay mechanics plans
+* Improve commands
+* Improve enemy object decomposition for better attack, decrypt implementation
+* Design firewall attack interface
+* Design encrypt, decrypt, filesystem, store interfaces
