@@ -1,6 +1,7 @@
 #include "ofApp.h"
 #include <boost/algorithm/string.hpp>
 #include "filesystem.h"
+#include "store.h"
 
 void Hackerman::setup(){
   ofSetFrameRate(kFPS);
@@ -15,10 +16,13 @@ void Hackerman::setup(){
 
   InitPanels();
 
-  filesystem_images = std::vector<ofImage>(3, ofImage());
+  //initialize filesystem images to be loaded later
   InitFileImages();
   InitFilesystem();
   main_panel.state = FILESYSTEM;
+
+  InitStoreImages();
+  InitUpgrades();
 
   PrintToConsole("Welcome to the Hackerman 1.9.8 Mainframe");
   PrintToConsole("Type \"help\" for usage instructions");
@@ -111,7 +115,11 @@ void Hackerman::mousePressed(int x, int y, int button){
       }
     }
   } else if (main_panel.state == STORE) {
-
+    for (unsigned int i = 0; i < upgrades.size(); i++) {
+      if (click_rectangle.intersects(upgrades[i].bound)) {
+        BuyUpgrade(upgrades[i].type);
+      }
+    }
   }
 }
 

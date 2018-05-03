@@ -7,6 +7,7 @@
 #include "player.h"
 #include "filesystem.h"
 #include "enemy.h"
+#include "store.h"
 
 class Hackerman : public ofBaseApp {
     void InitPanels();
@@ -16,6 +17,8 @@ class Hackerman : public ofBaseApp {
     void InitMainPanel();
     void InitFileImages();
     void InitFilesystem();
+    void InitUpgrades();
+    void InitStoreImages();
     void startMusicLoop();
 
     void DrawMenu();
@@ -39,10 +42,12 @@ class Hackerman : public ofBaseApp {
     bool PasswordGuess(std::string guess, std::string password);
     void RestoreEnemyFirewalls();
     void DefeatEnemy(Enemy &enemy);
+    void BuyUpgrade(UpgradeType type);
 
     void OpenEncryptInterface();
     void OpenFilesystemInterface();
     void DrawFilesystemInterface();
+    void DrawStoreInterface();
     void OpenStoreInterface();
     void OpenFirewallAttackInterface();
     void OpenDecryptInterface();
@@ -52,6 +57,10 @@ class Hackerman : public ofBaseApp {
     File fs_root;
     //current position in filesystem
     File current_dir;
+
+    std::vector<ofImage> upgrade_images;
+
+    std::vector<Upgrade> upgrades;
 
     ofRectangle DrawCenterAlign(ofImage &image, ofRectangle bound);
     ofRectangle DrawCenterAlignX(ofImage &image, ofRectangle bound, float y_ratio);

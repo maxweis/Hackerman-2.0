@@ -8,6 +8,7 @@ void Hackerman::OpenFilesystemInterface() {
 }
 
 void Hackerman::InitFileImages() {
+  filesystem_images = std::vector<ofImage>(EXECUTABLE + 1, ofImage());
   filesystem_images[FOLDER].load(kFolderImagePath);
   filesystem_images[DOCUMENT].load(kDocumentImagePath);
   filesystem_images[EXECUTABLE].load(kExecutableImagePath);

@@ -252,12 +252,7 @@ void Hackerman::OpenEncryptInterface() {
   }
 }
 
-void Hackerman::OpenStoreInterface() {
-  main_panel.state = STORE;
-}
-
 void Hackerman::OpenFirewallAttackInterface() {
-
 }
 
 void Hackerman::OpenDecryptInterface() {

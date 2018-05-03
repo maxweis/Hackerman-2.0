@@ -60,6 +60,8 @@ void Hackerman::DrawMainPanel() {
   //draw centered example text
   if (main_panel.state == FILESYSTEM) {
     DrawFilesystemInterface();
+  } else if (main_panel.state == STORE) {
+    DrawStoreInterface();
   }
 }
 
