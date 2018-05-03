@@ -16,6 +16,7 @@ void Hackerman::setup(){
 
   InitPanels();
 
+
   //initialize filesystem images to be loaded later
   InitFileImages();
   InitFilesystem();
@@ -30,7 +31,7 @@ void Hackerman::setup(){
 }
 
 void Hackerman::update(){
-  if (player.connected) {
+  if (player.connected && EnemiesAlive() != 0) {
     UpdateEnemies();
   }
   UpdatePlayer();

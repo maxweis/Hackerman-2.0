@@ -47,7 +47,6 @@ class UtilButton : public Panel {
         ofImage *icon) 
       : Panel(bound), icon(icon), number(button_number), row(row), 
       column(column) {}
-    // ~UtilButton();
 
     std::string title;
     ofImage *icon;

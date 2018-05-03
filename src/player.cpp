@@ -1,6 +1,7 @@
 #include "player.h"
 #include "ofApp.h"
 #include <algorithm>
+#include "enemy.h"
 
 //borrowed from stack overflow
 //https://stackoverflow.com/questions/440133/how-do-i-create-a-random-alpha-numeric-string-in-c
@@ -22,5 +23,14 @@ std::string GetRandomPassword(int length)
 void Hackerman::UpdatePlayer() {
   if (!player.password_encrypted && !player.firewall_up) {
     player.defeated = true;
+    PrintToConsole("You have failed. The enemies defeated you.");
+    draw();
+    ofSleepMillis(5000);
+  }
+
+  if (EnemiesAlive() == 0) {
+    PrintToConsole("You have succeeded. You have defeated all of the enemies.");
+    draw();
+    ofSleepMillis(50000);
   }
 }

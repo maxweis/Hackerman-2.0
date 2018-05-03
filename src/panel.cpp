@@ -191,6 +191,7 @@ void Hackerman::ProcessCommand() {
   } else if (command == "maxiscool") {
     //cheat code 
     player.sh_unlocked = true;
+    player.defense++;
   } else if (command == "connect") {
     HandleUtilButtonAction(CONNECT);
   } else if (command == "disconnect") {
@@ -253,18 +254,41 @@ void Hackerman::OpenEncryptInterface() {
 }
 
 void Hackerman::OpenFirewallAttackInterface() {
+  Enemy *enemy = GetFocusedEnemy();
+
+  if (!enemy) {
+    PrintToConsole("No enemy selected.");
+    return;
+  }
+
+  if (!enemy->firewall_up) {
+    PrintToConsole("The enemy's firewall is down.");
+    return;
+  }
+
+  if (enemy->firewall_attacked) {
+      int time_left = enemy->firewall_attack_time + enemy->firewall_strength - ofGetElapsedTimef();
+      PrintToConsole("The enemy's firewall will be down in " + 
+          std::to_string(time_left + 1) + " seconds.");
+      return;
+  }
+
+  PrintToConsole("Firewall being attacked. Enemy firewall offline in " +
+      std::to_string(enemy->firewall_strength) + " seconds.");
+  enemy->firewall_attack_time = ofGetElapsedTimef();
+  enemy->firewall_attacked = true;
 }
 
 void Hackerman::OpenDecryptInterface() {
   if (!GetFocusedEnemy()) {
-    PrintToConsole("No enemy selected");
+    PrintToConsole("No enemy selected.");
     return;
   }
 
   Enemy *enemy = GetFocusedEnemy();
 
   if (enemy->firewall_up) {
-    PrintToConsole("Can not decrypt enemy's password, their firewall is up.");
+    PrintToConsole("The enemy's firewall is up. You can not decrypt their bitcoin wallet.");
     return;
   }
 

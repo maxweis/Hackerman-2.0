@@ -43,6 +43,7 @@ class Hackerman : public ofBaseApp {
     void RestoreEnemyFirewalls();
     void DefeatEnemy(Enemy &enemy);
     void BuyUpgrade(UpgradeType type);
+    std::string GetRandomLivingEnemyName();
 
     void OpenEncryptInterface();
     void OpenFilesystemInterface();

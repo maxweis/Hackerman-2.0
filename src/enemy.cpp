@@ -3,6 +3,17 @@
 #include "ofMain.h"
 #include "ofApp.h"
 
+std::string Hackerman::GetRandomLivingEnemyName() {
+  std::string name;
+  int random_enemy_number;
+  do {
+  random_enemy_number = ofRandom(0, enemy_panels.size());
+  name = enemy_panels[random_enemy_number].enemy.name;
+  } while (enemy_panels[random_enemy_number].enemy.defeated);
+
+  return enemy_panels[random_enemy_number].enemy.name;
+}
+
 //generate unique random name from name list
 std::string GetRandomEnemyName() {
   static bool name_used[kEnemyNamesAmount] = { false };
@@ -38,6 +49,30 @@ std::string GetRandomIpString() {
 }
 
 void Hackerman::UpdateEnemies() {
+  //check if time has expired on enemy firewall going down
+  for (EnemyPanel &enemy_panel : enemy_panels) {
+    if (enemy_panel.enemy.firewall_attacked) {
+      float time = ofGetElapsedTimef() - enemy_panel.enemy.firewall_strength;
+      if (enemy_panel.enemy.firewall_attack_time <= time) {
+        enemy_panel.enemy.firewall_up = false;
+        enemy_panel.enemy.firewall_attacked = false;
+      }
+    }
+  }
+
+  //enemies randomly attack player
+  int probability = ofRandom(0, 1800 * player.defense);
+  if (probability == 1) {
+    if (player.firewall_up) {
+      player.firewall_up = false;
+      PrintToConsole("Your firewall has been take offline by " +
+          GetRandomLivingEnemyName() + ".");
+    } else {
+      player.password_encrypted = false;
+      PrintToConsole("Your bitcoin wallet has been decrypted and stolen by " +
+          GetRandomLivingEnemyName() + ".");
+    }
+  }
 }
 
 Enemy *Hackerman::GetFocusedEnemy() {
