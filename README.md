@@ -24,7 +24,7 @@ In addition to using the utility panel on the right of the game interface, playe
 
 ### Program usage
 To run the game, execute the program with these flags: <br>
-final-project-maxweis *[resolution_x] [resolution_y]*
+`Hackerman-2.0 *[resolution_x] [resolution_y]*`
 
 ### Build
 Dependencies :
