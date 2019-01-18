@@ -35,10 +35,10 @@ Have openFrameworks and boost libraries installed on your computer and place
 this project directory into your `apps` directory of your openFrameworks build. <br>
 Then to build on Unix-based operating systems use the following commands:
   <br>
-`cd final-project-maxweis`
+`cd Hackerman-2.0`
 <br>`make`
 <br>
 
-To then run the program, execute the binary in `final-project-maxweis/bin/final-project-maxweis`
+To then run the program, execute the binary in `Hackerman-2.0/bin/Hackerman-2.0`
 ### Inspiration
 Inspiration by classic "hacking" games such as Hacknet, Sunrise Hackathon, etc.
